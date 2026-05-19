@@ -52,6 +52,10 @@ export const createUrl = async (req: Request, res: Response): Promise<void> => {
 export const getUrl = async (req: Request, res: Response): Promise<void> => {
     try {
         const { shortUrl } = req.params;
+        if (!shortUrl || typeof shortUrl !== "string") {
+            res.status(400).json({ message: "Invalid short URL" });
+            return;
+        }
         const results = await db.select().from(urlTable).where(eq(urlTable.shortUrl, shortUrl));
         const record = results[0];
 
@@ -74,6 +78,10 @@ export const getUrl = async (req: Request, res: Response): Promise<void> => {
 export const getStats = async (req: Request, res: Response): Promise<void> => {
     try {
         const { shortUrl } = req.params;
+        if (!shortUrl || typeof shortUrl !== "string") {
+            res.status(400).json({ message: "Invalid short URL" });
+            return;
+        }
         const results = await db.select({
             shortUrl: urlTable.shortUrl,
             longUrl: urlTable.longUrl,
